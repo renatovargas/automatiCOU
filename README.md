@@ -30,7 +30,7 @@ Los requisitos mínimos son tener acceso a una computadora individual con el paq
 Una vez instalados estos programas, también es importante contar con librerías específicas, las cuales pueden ser instaladas desde la interface de RStudio (menú Tools/ Install packages o Herramientas/Instalar paquetes) o a través de la línea de comando de R, copiando lo siguiente:
 
 ```
-  install.packages("readx", "openxlsx", "reshape2", 
+  install.packages(c("readxl", "openxlsx", "reshape2", 
                    "stringr", "plyr", "RSQLite", 
-                   "DBI", "readr", "pivottabler")
+                   "DBI", "readr", "pivottabler"))
 ```
