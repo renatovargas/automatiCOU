@@ -1,0 +1,110 @@
+---
+title: "Una breve introducción a las funciones necesarias de R"
+output:
+  html_document:
+    df_print: paged
+---
+
+## Asignar
+
+Un valor
+
+```{r}
+uno <- 1
+uno
+```
+
+Un rango de números
+
+```{r}
+n10 <- c(1:10)
+n10
+```
+
+Una cadena de caracteres
+
+```{r}
+c <- "Costa"
+c
+```
+
+Un vector de cadenas de caracteres
+
+```{r}
+a <- c( "Uno", "Dos", "Tres")
+a
+```
+
+Usando la función de asignación
+
+```{r}
+assign("b", a)
+b
+```
+
+Usando un muestreo 
+
+```{r}
+tresletras <- LETTERS[1:3]
+caracteres <- sample(tresletras, 10, replace = TRUE)
+tresletras
+caracteres
+```
+
+## Matrices y cuadros de datos
+
+Una matriz
+
+```{r}
+d <- matrix(c(3,4,5,7,8,9, 12, 34,28), nrow = 3, ncol = 3, byrow = TRUE)
+d
+```
+
+Un cuadro de datos
+
+```{r}
+e <- data.frame(x = 1, y = 1:10, caracteres = caracteres)
+e
+```
+
+Extraer los valores de una columna como vector
+
+```{r}
+extraccion <- e$y
+extraccion
+```
+
+Multiplicar ese vector por un tipo de cambio
+
+```{r}
+extraccion * 2
+```
+
+## Concatenación
+
+```{r}
+paste(c, "Rica" )
+```
+
+## Índices
+
+..de Vectores
+
+```{r}
+a
+a[2]
+```
+
+...de matrices o marcos de datos
+
+```{r}
+d
+d[1, 3]
+```
+
+Índices negativos
+
+```{r}
+d
+d[-1,-3]
+```
