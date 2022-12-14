@@ -19,9 +19,7 @@ library(plyr)
 
 iso <- "CRI"
 
-# Lógica recursiva
-# ================
-
+#Abrimos excel y tomamos nota de sus hojas
 archivo <- "datos/CR_COUs_2017-2020.xlsx"
 hojas <- excel_sheets(archivo)
 
@@ -32,14 +30,14 @@ hojas <- hojas[-c(5:9)]
 # los objetos que vamos creando.
 lista <- c("inicio")
 
-# Índice de la primera iteración
-# Escogemos 2018 para referencia
-i<- 1
+# Índice de la primera iteración (explicar después)
+i <- 1
 
 # Iniciamos el bucle
-# for (i in 1:length(hojas)) {
-  
-  # Extraemos el año y la unidad de medida
+
+#for (i in 1:length(hojas)) {
+ 
+ # Extraemos el año y la unidad de medida
   info <- read_excel(
     archivo,
     range = paste("'", hojas[i], "'!c5:c6", sep = "") ,
@@ -48,12 +46,12 @@ i<- 1
   )
   
   # Extraemos el año de la cadena de caracteres
-  anio <- as.numeric((str_extract(info[1,], "\\d{4}")))
+  anio <- as.numeric((str_extract(info[1, ], "\\d{4}")))
   
   # Unidad de medida
-  unidad <- toString(info[2,])
+  unidad <- toString(info[2, ])
   
-  # Precios  
+  # Precios
   precios <- "Corrientes"
   
   
@@ -73,11 +71,12 @@ i<- 1
   # Damos un identificador correlativo a las filas y columnas
   # código ISO en la forma "ISO3of001" o "ISO3oc001"
   
-  rownames(oferta) <- c(sprintf(paste(iso, "of%03d", sep = ""), seq(1, dim(oferta)[1])))
-  colnames(oferta) <- c(sprintf(paste(iso, "oc%03d", sep = ""), seq(1, dim(oferta)[2])))
+  rownames(oferta) <-
+    c(sprintf(paste(iso, "of%03d", sep = ""), seq(1, dim(oferta)[1])))
+  colnames(oferta) <-
+    c(sprintf(paste(iso, "oc%03d", sep = ""), seq(1, dim(oferta)[2])))
   
   # Columnas a eliminar con subtotales y totales
-  
   of_omitir_columnas <- c(
     1,4,7,10,13,16,19,22,25,28,31,34,37,40,43,46,49,52,55,
     58,61,64,67,70,73,76,79,82,85,88,91,94,97,100,103,107,
@@ -88,17 +87,15 @@ i<- 1
     295,298,301,304,307,310,313,316,320,323,326,329,332,335,
     338,341,344,347,350,353,356,359,360,361,362,365,368,371,
     374,377,380,383,384,385,386,389,392,395,398,401,404,407,
-    410,413,414,415,416,417,418,419,420,423,426,427,429,434,
-    438,439
+    410,413,416,417,418,419,420,421,422,423,426,429,430,432,
+    437,441,442
     )
   
-  of_omitir_filas <- c(
-    185
-  )
+  of_omitir_filas <- c(185)
   
   # Matriz con filas y columnas omitidas
-  oferta1 <- oferta[-of_omitir_filas,-of_omitir_columnas]
-
+  oferta1 <- oferta[-of_omitir_filas, -of_omitir_columnas]
+  
   # Desdoblamos
   oferta <- cbind(anio, precios, 1, "Oferta", melt(oferta1), unidad)
   
@@ -125,9 +122,11 @@ i<- 1
   
   utilizacion[is.na(utilizacion)] <- 0.0
   
-  rownames(utilizacion) <- c(sprintf(paste(iso, "uf%03d", sep = ""), seq(1, dim(utilizacion)[1])))
-  colnames(utilizacion) <- c(sprintf(paste(iso, "uc%03d", sep = ""), seq(1, dim(utilizacion)[2])))
-
+  rownames(utilizacion) <-
+    c(sprintf(paste(iso, "uf%03d", sep = ""), seq(1, dim(utilizacion)[1])))
+  colnames(utilizacion) <-
+    c(sprintf(paste(iso, "uc%03d", sep = ""), seq(1, dim(utilizacion)[2])))
+  
   ut_omitir_columnas <- c(
     1,4,7,10,13,16,19,22,25,28,31,34,37,40,43,46,49,52,55,
     58,61,64,67,70,73,76,79,82,85,88,91,94,97,100,103,107,
@@ -138,15 +137,13 @@ i<- 1
     295,298,301,304,307,310,313,316,320,323,326,329,332,335,
     338,341,344,347,350,353,356,359,360,361,362,365,368,371,
     374,377,380,383,384,385,386,389,392,395,398,401,404,407,
-    410,413,414,415,416,417,418,419,420,423,426,427,431,434,
-    435,439,440
+    410,413,416,417,418,419,420,421,422,423,426,429,430,434,
+    437,438,442,443
   )
   
-  ut_omitir_filas <- c(
-    185
-  )
+  ut_omitir_filas <- c(185)
   
-  utilizacion1 <- utilizacion[-ut_omitir_filas,-ut_omitir_columnas]
+  utilizacion1 <- utilizacion[-ut_omitir_filas, -ut_omitir_columnas]
   
   
   round(as.matrix(rowSums(oferta1)) - as.matrix(rowSums(utilizacion1)))
@@ -171,43 +168,53 @@ i<- 1
       "Valor",
       "Unidades")
   
-  
-  # Cuadros de Valor Agregado y empleo solo para precios Corrientes
-  # ========================
-  
   # Cuadro de Valor Agregado
   # ========================
   
   valorAgregado <- as.data.frame(read_excel(
     archivo,
-    range = paste("'" , hojas[i], "'!c167:bn167", sep = ""),
+    range = paste("'" , hojas[i], "'!c404:pg404", sep = ""),
     col_names = FALSE,
     col_types = "numeric"
   ))
+  
+  # Correlativos de fila y columna
   rownames(valorAgregado) <-
-    c(sprintf("vf%03d", seq(1, dim(valorAgregado)[1])))
+    c(sprintf(paste(iso, "vf%03d", sep = ""), seq(1, dim(valorAgregado)[1])))
   colnames(valorAgregado) <-
-    c(sprintf("vc%03d", seq(1, dim(valorAgregado)[2])))
+    c(sprintf(paste(iso, "vc%03d", sep = ""), seq(1, dim(valorAgregado)[2])))
+  
+  # Si hay celdas sin dato, las volvemos cero
   valorAgregado[is.na(valorAgregado)] <- 0.0
   
-  #   Columnas a eliminar con subtotales y totales
+  # Columnas y filas a eliminar con subtotales y totales
   
-  #   vc093	SUBTOTAL DE MERCADO
-  #   vc098	SUBTOTAL USO FINAL PROPIO
-  #   vc108	SUBTOTAL NO DE MERCADO
-  #   vc109 TOTAL
+  va_omitir_columnas <- c(
+    1,4,7,10,13,16,19,22,25,28,31,34,37,40,43,46,49,52,55,
+    58,61,64,67,70,73,76,79,82,85,88,91,94,97,100,103,107,
+    110,113,117,121,124,127,131,134,137,141,148,151,154,158,
+    161,164,168,171,176,179,182,185,188,191,194,197,200,203,
+    206,209,212,215,218,221,224,227,230,233,237,240,244,247,
+    250,254,257,260,263,266,269,272,275,278,281,284,288,292,
+    295,298,301,304,307,310,313,316,320,323,326,329,332,335,
+    338,341,344,347,350,353,356,359,360,361,362,365,368,371,
+    374,377,380,383,384,385,386,389,392,395,398,401,404,407,
+    410,413,416,417,418,419,420,421
+  )
   
-  valorAgregado <- valorAgregado[,-c(1, 2, 3)]
+  valorAgregado <- valorAgregado[, -va_omitir_columnas]
   
   # Desdoblamos
   valorAgregado <-
-    cbind(anio,
-          precios,
-          3,
-          "Valor Agregado",
-          "vf001",
-          melt(valorAgregado),
-          unidad)
+    cbind(
+      anio,
+      precios,
+      3,
+      "Valor Agregado",
+      paste(iso, "vf001", sep = ""),
+      melt(valorAgregado),
+      unidad
+    )
   
   colnames(valorAgregado) <-
     c("Año",
@@ -219,59 +226,68 @@ i<- 1
       "Valor",
       "Unidades")
   
-  # Empleo
-  # ======
-  #   empleo <- as.data.frame(read_excel(
-  #     archivo,
-  #     range = paste("'" , hojas[i], "'!D332:DH332", sep = ""),
-  #     col_names = FALSE,
-  #     col_types = "numeric"
-  #   ))
-  #   rownames(empleo) <- c(sprintf("ef%03d", seq(1, dim(empleo)[1])))
-  #   colnames(empleo) <- c(sprintf("ec%03d", seq(1, dim(empleo)[2])))
-  #
-  #   #   Columnas a eliminar con subtotales y totales
-  #
-  #   #   vc093	SUBTOTAL DE MERCADO
-  #   #   vc098	SUBTOTAL USO FINAL PROPIO
-  #   #   vc108	SUBTOTAL NO DE MERCADO
-  #   #   vc109 TOTAL
-  #
-  #   empleo <- empleo[, -c(93, 98, 108, 109)]
-  #
-  #   #Desdoblamos
-  #   empleo <- cbind(anio,
-  #                   precios,
-  #                   4,
-  #                   "Empleo",
-  #                   "ef001",
-  #                   melt(empleo),
-  #                   "Puestos de trabajo")
-  #
-  #   colnames(empleo) <- c("Año",
-  #                         "Precios",
-  #                         "No. Cuadro",
-  #                         "Cuadro",
-  #                         "Filas",
-  #                         "Columnas",
-  #                         "Valor",
-  #                         "Unidades")
-  #
-  #
-  # # Unimos todas las partes
-  # if (precios == "Corrientes") {
-  #   union <- rbind(oferta,
-  #                  utilizacion,
-  #                  valorAgregado,
-  #                  empleo)
-  #
-  union <- rbind(oferta, utilizacion, valorAgregado)
+  # Cuadro de empleo
+  # =====================
+  
+  empleo <- as.matrix(read_excel(
+    archivo,
+    range = paste("'" , hojas[i], "'!C453:PG458", sep = ""),
+    col_names = FALSE,
+    col_types = "numeric"
+  ))
+  
+  empleo[is.na(empleo)] <- 0.0
+  
+  rownames(empleo) <-
+    c(sprintf(paste(iso, "ef%03d", sep = ""), seq(1, dim(empleo)[1])))
+  colnames(empleo) <-
+    c(sprintf(paste(iso, "ec%03d", sep = ""), seq(1, dim(empleo)[2])))
+  
+  et_omitir_columnas <- c(
+    1,4,7,10,13,16,19,22,25,28,31,34,37,40,43,46,49,52,55,
+    58,61,64,67,70,73,76,79,82,85,88,91,94,97,100,103,107,
+    110,113,117,121,124,127,131,134,137,141,148,151,154,158,
+    161,164,168,171,176,179,182,185,188,191,194,197,200,203,
+    206,209,212,215,218,221,224,227,230,233,237,240,244,247,
+    250,254,257,260,263,266,269,272,275,278,281,284,288,292,
+    295,298,301,304,307,310,313,316,320,323,326,329,332,335,
+    338,341,344,347,350,353,356,359,360,361,362,365,368,371,
+    374,377,380,383,384,385,386,389,392,395,398,401,404,407,
+    410,413,416,417,418,419,420,421
+  )
+  
+  empleo <- empleo[, -et_omitir_columnas]
+  
+  
+  # Desdoblamos
+  empleo <-
+    cbind(anio,
+          precios,
+          4,
+          "Empleo",
+          melt(empleo),
+          "Personal ocupado")
+  
+  colnames(empleo) <-
+    c("Año",
+      "Precios",
+      "No. Cuadro",
+      "Cuadro",
+      "Filas",
+      "Columnas",
+      "Valor",
+      "Unidades")
+  
+  
+  # Unimos todas las partes
+  #========================
+  
+  union <- rbind(oferta, utilizacion, valorAgregado, empleo)
   assign(paste("COU_", anio, "_", precios, sep = ""),
          union)
   lista <- c(lista, paste("COU_", anio, "_", precios, sep = ""))
-
   
-# } # Cierre del bucle original
+#} # Cierre del bucle original
 
 # Actualizamos nuestra lista de objetos creados
 lista <- lapply(lista[-1], as.name)
@@ -280,31 +296,36 @@ lista <- lapply(lista[-1], as.name)
 SCN <- do.call(rbind.data.frame, lista)
 
 # Y borramos los objetos individuales
-do.call(rm,lista)
+do.call(rm, lista)
 
-
+# Tablas de equivalencia
+# ======================
 
 # Le damos significado a las filas y columnas
+clasificacionColumnas <-
+  read_xlsx("datos/CRI_filas_y_columnas.xlsx",
+            sheet = "columnas",
+            col_names = TRUE,
+  )
 
-clasificacionColumnas <- read_xlsx("COL_Clasificaciones.xlsx",
-                                   sheet = "columnas",
-                                   col_names = TRUE,)
-
-clasificacionFilas <- read_xlsx("COL_Clasificaciones.xlsx",
+clasificacionFilas <- read_xlsx("datos/CRI_filas_y_columnas.xlsx",
                                 sheet = "filas",
-                                col_names = TRUE,)
+                                col_names = TRUE,
+)
 
-#SCN <- join(SCN,clasificacionColumnas,by = "Columnas")
-#SCN <- join(SCN,clasificacionFilas, by = "Filas")
+SCN <- join(SCN, clasificacionColumnas, by = "Columnas")
+SCN <- join(SCN, clasificacionFilas, by = "Filas")
+
+# Limpiamos la basura
 gc()
 
 # Y lo exportamos a Excel
-write.xlsx(
-  SCN,
-  "salidas/COL_SCN_BD.xlsx",
-  sheetName= "COL_SCN_BD",
-  rowNames=FALSE,
-  colnames=FALSE,
-  overwrite = TRUE,
-  asTable = FALSE
-)
+# write.xlsx(
+#   SCN,
+#   "salidas/CRI_SCN_BD.xlsx",
+#   sheetName = "CRI_SCN_BD",
+#   rowNames = FALSE,
+#   colnames = FALSE,
+#   overwrite = TRUE,
+#   asTable = FALSE
+# )
