@@ -5,7 +5,7 @@
 # PREÁMBULO
 
 # Limpiar el área de trabajo
-rm(list = ls())
+rm(list = ls()) # esta línea borra todo lo que está en el ambiente
 
 # Llamar librerías
 library(readxl)
@@ -24,7 +24,7 @@ archivo <- "datos/CR_COUs_2017-2020.xlsx"
 hojas <- excel_sheets(archivo)
 
 # Eliminamos las que no vamos a usar
-hojas <- hojas[-c(5:9)]
+hojas <- hojas[-c(5:8)]
 
 # Creamos una lista para llevar registro de
 # los objetos que vamos creando.
@@ -35,7 +35,7 @@ i <- 1
 
 # Iniciamos el bucle
 
-#for (i in 1:length(hojas)) {
+for (i in 1:length(hojas)) {
  
  # Extraemos el año y la unidad de medida
   info <- read_excel(
@@ -46,7 +46,7 @@ i <- 1
   )
   
   # Extraemos el año de la cadena de caracteres
-  anio <- as.numeric((str_extract(info[1, ], "\\d{4}")))
+  anio <- as.numeric((str_extract(info[1, 1], "\\d{4}")))
   
   # Unidad de medida
   unidad <- toString(info[2, ])
@@ -94,7 +94,7 @@ i <- 1
   of_omitir_filas <- c(185)
   
   # Matriz con filas y columnas omitidas
-  oferta1 <- oferta[-of_omitir_filas, -of_omitir_columnas]
+  oferta1 <- oferta[ -of_omitir_filas, -of_omitir_columnas ]
   
   # Desdoblamos
   oferta <- cbind(anio, precios, 1, "Oferta", melt(oferta1), unidad)
@@ -287,7 +287,7 @@ i <- 1
          union)
   lista <- c(lista, paste("COU_", anio, "_", precios, sep = ""))
   
-#} # Cierre del bucle original
+} # Cierre del bucle original
 
 # Actualizamos nuestra lista de objetos creados
 lista <- lapply(lista[-1], as.name)
@@ -320,12 +320,12 @@ SCN <- join(SCN, clasificacionFilas, by = "Filas")
 gc()
 
 # Y lo exportamos a Excel
-# write.xlsx(
-#   SCN,
-#   "salidas/CRI_SCN_BD.xlsx",
-#   sheetName = "CRI_SCN_BD",
-#   rowNames = FALSE,
-#   colnames = FALSE,
-#   overwrite = TRUE,
-#   asTable = FALSE
-# )
+write.xlsx(
+  SCN,
+  "salidas/CRI_SCN_BD.xlsx",
+  sheetName = "CRI_SCN_BD",
+  rowNames = FALSE,
+  colnames = FALSE,
+  overwrite = TRUE,
+  asTable = FALSE
+)

@@ -1,6 +1,7 @@
 ---
 title: "Una breve introducción a las funciones necesarias de R"
 output:
+  word_document: default
   html_document:
     df_print: paged
 ---
@@ -92,14 +93,14 @@ paste(c, "Rica" )
 
 ```{r}
 a
-a[2]
+a[ c(1,3) ]
 ```
 
 ...de matrices o marcos de datos
 
 ```{r}
 d
-d[1, 3]
+d[c(1,3), 3]
 ```
 
 Índices negativos
