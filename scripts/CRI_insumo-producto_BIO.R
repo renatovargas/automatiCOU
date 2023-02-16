@@ -520,6 +520,6 @@ write.xlsx( as.data.frame(deltaE) ,
             )
 
 # Gráfico
-heatmap(E1, Colv = NA, Rowv = NA)
+heatmap(LAB, Colv = NA, Rowv = NA)
 
 

@@ -145,6 +145,8 @@ Nuestro nuevo cuadro
 # Pago a factores 810.89  1289.11    1100       3200.00
 # Total insumos  1247.53  1841.58    3200       6289.10
 
+
+
 ```
 
 
@@ -154,21 +156,23 @@ de los nuevos niveles.
 Cambios en demanda
 ```{r}
 deltaf <- fnueva - f
-
+deltaf
 ```
 
 Cambios en producto
 ```{r}
 deltax <- xnueva - x
+deltax
 ```
 
 Cambios a toda la tabla Z
 ```{r}
 deltaZ <- Znueva - Z
+deltaZ
 ```
 
 
-En moneda local. Tipo de cambio 7.70 ML por 1 USD
+En moneda local. Tipo de cambio 600.70 ML por 1 USD
 
 ```{r}
 tc <- 7.70
@@ -199,6 +203,7 @@ y posmultiplicarla por una versión diagonal de x
 
 ```{r}
 epsilon <- t(as.matrix(eprima)) %*% solve(diag(x))
+epsilon
 ```
 
 
@@ -304,6 +309,7 @@ Nuestros multiplicadores son:
 
 ```{r}
 mo <- i%*%L
+mo
 ```
 
 Estos son muy útiles porque nos dicen en qué sectores nuestras inversiones
