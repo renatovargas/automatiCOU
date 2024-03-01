@@ -116,8 +116,8 @@ xnueva
 
 De nuestra definición de coeficientes Z= A %*% xhat encontramos Znueva
 
-```{r}
-Znueva <- A %*% diag(xnueva)  error
+```{r eval=FALSE}
+Znueva <- A %*% diag(xnueva)  # error
 ```
 
 Nos da un error porque xnueva no es entendido como vector por R, es una
